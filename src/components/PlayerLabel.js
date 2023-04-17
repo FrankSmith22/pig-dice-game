@@ -5,11 +5,11 @@ const PlayerLabel = ({playerNames}) => {
         <Row>
             <Col className="text-center">
                 <h2>Player One</h2>
-                <p>{playerNames[0]}</p>
+                <p>{playerNames.playerOne}</p>
             </Col>
             <Col className="text-center">
                 <h2>Player Two</h2>
-                <p>{playerNames[1]}</p>
+                <p>{playerNames.playerTwo}</p>
             </Col>
         </Row>
     )
