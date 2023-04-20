@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Col, Container, Modal, ModalBody, ModalHeader, Row } from "reactstrap";
 import PlayerLabel from "./PlayerLabel";
+import DieFace from "./DieFace";
 
 const Main = () => {
 
@@ -66,6 +67,7 @@ const Main = () => {
             </Modal>
             <Container>
                 <PlayerLabel playerNames={playerNames} />
+                <DieFace faceNum={3}/>
             </Container>
         </>
     )
