@@ -1,18 +1,20 @@
 import React from "react";
+import PlayerCard from "../features/players/PlayerCard";
+import { Col, Container, Row } from "reactstrap";
 
 const Main = () => {
 
 
     return (
         <>
-            <div>
-                <p>
-                Player name: Frank <br />
-                total score: 50 <br />
-                current score: 3 <br />
-                </p>
-            </div>
-            <button>Roll</button>
+            <Container>
+                <Row>
+                    <Col xs="3" className="text-center mx-auto">
+                        <PlayerCard />
+                        <button>Roll</button>
+                    </Col>
+                </Row>
+            </Container>
         </>
     )
 }
