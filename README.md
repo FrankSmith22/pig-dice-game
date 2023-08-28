@@ -4,6 +4,7 @@ This is an old dice game I discovered once when looking for personal project ide
 
 I would now like to remake it in React to keep up practice!
 
+<hr/>
 
 To keep myself motivated and organized, I will do the following
 1. Make a trello board to keep track of individual features so it's not just all up in my head

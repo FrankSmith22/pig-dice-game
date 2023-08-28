@@ -1,18 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialPlayer = {
+    name: "Elegos",
+    score: 5,
+    totalScore: 24,
+}
+
 const initialState = {
     players: [
+        initialPlayer,
         {
-            name: "Elegos",
-            score: 5,
-            totalScore: 24,
+            name: "Mononoke",
+            score: 10,
+            totalScore: 15
         }
     ],
-    activePlayer: {
-        name: "Elegos",
-        score: 5,
-        totalScore: 24,
-    }
+    activePlayer: initialPlayer
 }
 
 const playersSlice = createSlice({
@@ -29,6 +32,8 @@ const playersSlice = createSlice({
 })
 
 export const getActivePlayer = (state) => state.players.activePlayer
+
+export const getAllPlayers = (state) => state.players.players
 
 export const { setActivePlayer } = playersSlice.actions
 
