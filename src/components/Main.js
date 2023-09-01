@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import PlayerCard from "../features/players/PlayerCard";
-import { getAllPlayers, getActivePlayer, increaseScore, increaseTotalScore } from "../features/players/playersSlice";
+import { getAllPlayers, getActivePlayer, increaseScore, increaseTotalScore, getWinner } from "../features/players/playersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Container, Row } from "reactstrap";
+
+const Winner = () => {
+    const winner = useSelector(getWinner)
+    return (
+        <span>{winner ? `The winner is ${winner}!` : ""}</span>
+    )
+}
 
 const Main = () => {
 
@@ -18,8 +25,6 @@ const Main = () => {
             activePlayer: activePlayer,
             increase: randomNum 
         }))
-        console.log("Dispatched!")
-        console.log(players[0].score)
     }
 
     const handleHold = (activePlayer) => {
@@ -48,6 +53,11 @@ const Main = () => {
                 <Row>
                     <Col className="text-center mx-auto mt-3" style={{fontSize: "50px"}}>
                         <span>{latestRoll ? latestRoll : "___"}</span>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="text-center mx-auto mt-3" >
+                        <Winner />
                     </Col>
                 </Row>
             </Container>

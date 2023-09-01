@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { POINT_GOAL } from "../../app/gameConstants";
 
 const initialState = {
     players: [
@@ -13,7 +14,8 @@ const initialState = {
             totalScore: 0
         }
     ],
-    activePlayer: "Elegos"
+    activePlayer: "Elegos",
+    winner: ""
 }
 
 const playersSlice = createSlice({
@@ -33,6 +35,9 @@ const playersSlice = createSlice({
                 if (player.name === action.payload.activePlayer) {
                     let newPlayer = {...player}
                     newPlayer.score += action.payload.increase
+                    if (newPlayer.score + newPlayer.totalScore >= POINT_GOAL) {
+                        newState.winner = newPlayer.name
+                    }
                     newPlayers.push(newPlayer)
                 }
                 else{
@@ -65,6 +70,8 @@ const playersSlice = createSlice({
 export const getActivePlayer = (state) => state.players.activePlayer
 
 export const getAllPlayers = (state) => state.players.players
+
+export const getWinner = (state) => state.players.winner
 
 export const { setActivePlayer, increaseScore, increaseTotalScore } = playersSlice.actions
 
