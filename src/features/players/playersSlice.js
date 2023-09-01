@@ -28,14 +28,6 @@ const playersSlice = createSlice({
         },
         increaseScore: (state, action) => {
             const newState = {...state}
-            // newState.players.map(player => {
-            //     if (player.name === action.payload.activePlayer){
-            //         let playerModified = {...player}
-            //         playerModified.score += action.payload.increase
-            //         return playerModified
-            //     }
-            //     return player
-            // })
             const newPlayers = []
             for(const player of newState.players) {
                 if (player.name === action.payload.activePlayer) {
