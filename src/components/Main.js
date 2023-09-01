@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PlayerCard from "../features/players/PlayerCard";
-import { getAllPlayers, getActivePlayer, increaseScore } from "../features/players/playersSlice";
+import { getAllPlayers, getActivePlayer, increaseScore, increaseTotalScore } from "../features/players/playersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Container, Row } from "reactstrap";
 
@@ -22,6 +22,11 @@ const Main = () => {
         console.log(players[0].score)
     }
 
+    const handleHold = (activePlayer) => {
+        dispatch(increaseTotalScore({activePlayer}))
+        setLatestRoll(undefined)
+    }
+
     return (
         <>
             <Container>
@@ -36,7 +41,8 @@ const Main = () => {
                 </Row>
                 <Row>
                     <Col className="text-center mx-auto">
-                        <button className="btn btn-lg btn-success" onClick={() => handleRoll(activePlayer)}>Roll</button>
+                        <button className="btn btn-lg mx-5 btn-success" onClick={() => handleRoll(activePlayer)}>Roll</button>
+                        <button className="btn btn-lg mx-5 btn-warning" onClick={() => handleHold(activePlayer)}>Hold</button>
                     </Col>
                 </Row>
                 <Row>
