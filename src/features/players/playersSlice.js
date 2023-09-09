@@ -63,6 +63,22 @@ const playersSlice = createSlice({
             }
             newState.players = newPlayers
             return newState
+        },
+        resetScore: (state, action) => {
+            const newState = {...state}
+            const newPlayers = []
+            for(const player of newState.players) {
+                if (player.name === action.payload.activePlayer) {
+                    let newPlayer = {...player}
+                    newPlayer.score = 0
+                    newPlayers.push(newPlayer)
+                }
+                else {
+                    newPlayers.push(player)
+                }
+            }
+            newState.players = newPlayers
+            return newState    
         }
     }
 })
@@ -73,6 +89,6 @@ export const getAllPlayers = (state) => state.players.players
 
 export const getWinner = (state) => state.players.winner
 
-export const { setActivePlayer, increaseScore, increaseTotalScore } = playersSlice.actions
+export const { setActivePlayer, increaseScore, increaseTotalScore, resetScore } = playersSlice.actions
 
 export const playersReducer = playersSlice.reducer

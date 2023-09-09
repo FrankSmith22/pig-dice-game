@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PlayerCard from "../features/players/PlayerCard";
-import { getAllPlayers, getActivePlayer, increaseScore, increaseTotalScore, getWinner } from "../features/players/playersSlice";
+import { getAllPlayers, getActivePlayer, increaseScore, increaseTotalScore, getWinner, resetScore } from "../features/players/playersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Container, Row } from "reactstrap";
 
@@ -21,6 +21,12 @@ const Main = () => {
     const handleRoll = (activePlayer) => {
         const randomNum = Math.ceil(Math.random() * 6)
         setLatestRoll(randomNum)
+        if(randomNum === 1) {
+            console.log("Oops you rolled a 1!")
+            dispatch(resetScore({activePlayer}))
+            // Switch turn to other player
+            return
+        }
         dispatch(increaseScore({
             activePlayer: activePlayer,
             increase: randomNum 
@@ -52,7 +58,7 @@ const Main = () => {
                 </Row>
                 <Row>
                     <Col className="text-center mx-auto mt-3" style={{fontSize: "50px"}}>
-                        <span>{latestRoll ? latestRoll : "___"}</span>
+                        <span style={latestRoll === 1 ? {color: "red"} : {}}>{latestRoll ? latestRoll : "___"}</span>
                     </Col>
                 </Row>
                 <Row>
