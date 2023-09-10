@@ -25,7 +25,7 @@ const playersSlice = createSlice({
         setActivePlayer: (state, action) => {
             return {
                 ...state,
-                activePlayer: action.payload
+                activePlayer: action.payload.newActivePlayer
             }
         },
         increaseScore: (state, action) => {

@@ -4,12 +4,12 @@ import {
     CardBody
 } from 'reactstrap'
 
-const PlayerCard = ({ player }) => {
+const PlayerCard = ({ player, activePlayer }) => {
 
     return (
         <Card>
-            <CardHeader>{player.name}</CardHeader>
-            <CardBody>
+            <CardHeader className={player.name === activePlayer ? "bg-success" : ""}>{player.name}</CardHeader>
+            <CardBody className={player.name === activePlayer ? "bg-success-light" : ""}>
                 score: {player.score} <br />
                 total score: {player.totalScore}
             </CardBody>

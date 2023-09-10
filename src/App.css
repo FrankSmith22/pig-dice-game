@@ -1,0 +1,7 @@
+:root {
+    --c-bs-success-lighter: #87d6b1;
+}
+
+.bg-success-light {
+    background-color: var(--c-bs-success-lighter);
+}

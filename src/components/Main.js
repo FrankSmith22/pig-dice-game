@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PlayerCard from "../features/players/PlayerCard";
-import { getAllPlayers, getActivePlayer, increaseScore, increaseTotalScore, getWinner, resetScore } from "../features/players/playersSlice";
+import { getAllPlayers, getActivePlayer, increaseScore, increaseTotalScore, getWinner, resetScore, setActivePlayer } from "../features/players/playersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Container, Row } from "reactstrap";
 
@@ -16,7 +16,7 @@ const Main = () => {
     const players = useSelector(getAllPlayers)
     const activePlayer = useSelector(getActivePlayer)
     const dispatch = useDispatch()
-    const [latestRoll, setLatestRoll] = useState(undefined)
+    const [latestRoll, setLatestRoll] = useState(null)
 
     const handleRoll = (activePlayer) => {
         const randomNum = Math.ceil(Math.random() * 6)
@@ -24,7 +24,8 @@ const Main = () => {
         if(randomNum === 1) {
             console.log("Oops you rolled a 1!")
             dispatch(resetScore({activePlayer}))
-            // Switch turn to other player
+            const newActivePlayer = players.find(player => player.name !== activePlayer).name
+            dispatch(setActivePlayer({newActivePlayer}))
             return
         }
         dispatch(increaseScore({
@@ -32,10 +33,12 @@ const Main = () => {
             increase: randomNum 
         }))
     }
-
+    
     const handleHold = (activePlayer) => {
         dispatch(increaseTotalScore({activePlayer}))
-        setLatestRoll(undefined)
+        const newActivePlayer = players.find(player => player.name !== activePlayer).name
+        dispatch(setActivePlayer({newActivePlayer}))
+        setLatestRoll(null)
     }
 
     return (
@@ -45,7 +48,7 @@ const Main = () => {
                     {players.map((player, i) => {
                         return (
                             <Col key={i} xs="3" className="text-center mx-auto">
-                                <PlayerCard player={player} />
+                                <PlayerCard player={player} activePlayer={activePlayer} />
                             </Col>
                         )
                     })}
