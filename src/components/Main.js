@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import GameStart from "./GameStart";
 import PlayerCard from "../features/players/PlayerCard";
 import { getAllPlayers, getActivePlayer, increaseScore, increaseTotalScore, getWinner, resetScore, setActivePlayer } from "../features/players/playersSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +25,7 @@ const Main = () => {
         if(randomNum === 1) {
             console.log("Oops you rolled a 1!")
             dispatch(resetScore({activePlayer}))
-            const newActivePlayer = players.find(player => player.name !== activePlayer).name
+            const newActivePlayer = players.find(player => player.name !== activePlayer).name // Yes, this definitely hardcodes the game to be 2 player
             dispatch(setActivePlayer({newActivePlayer}))
             return
         }
@@ -43,6 +44,7 @@ const Main = () => {
 
     return (
         <>
+            <GameStart />
             <Container>
                 <Row>
                     {players.map((player, i) => {
