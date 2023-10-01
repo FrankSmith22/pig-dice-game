@@ -8,6 +8,7 @@ import {
     Col
 } from 'reactstrap'
 import { setPlayers } from '../features/players/playersSlice'
+import { setIsGameActive } from '../features/game/gameSlice'
 import { NAMES } from '../app/nameGeneration/names'
 import { ADJECTIVES } from '../app/nameGeneration/adjectives'
 
@@ -24,6 +25,7 @@ const GameStart = () => {
             alert("Please make sure both fields are filled with at least one letter")
             return
         }
+        dispatch(setIsGameActive({isGameActive: true}))
         dispatch(setPlayers({playerNames: [playerOneName, playerTwoName]}))
         setIsOpen(false)
     }
