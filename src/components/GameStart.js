@@ -20,6 +20,10 @@ const GameStart = () => {
     const [playerTwoName, setPlayerTwoName] = useState('')
 
     const handleGameStart = () => {
+        if(!playerOneName || !playerTwoName){
+            alert("Please make sure both fields are filled with at least one letter")
+            return
+        }
         dispatch(setPlayers({playerNames: [playerOneName, playerTwoName]}))
         setIsOpen(false)
     }
