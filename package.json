@@ -1,6 +1,7 @@
 {
   "name": "pig-dice-game",
   "version": "0.1.0",
+  "homepage": "https://franksmith22.github.io/pig-dice-game/",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.4",
@@ -24,8 +25,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "rm -rf build && npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
-    "build": "rm -rf docs && react-scripts build && mv build docs",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -46,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.0.0"
   }
 }
