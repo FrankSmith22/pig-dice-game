@@ -73,17 +73,17 @@ const Main = () => {
     return (
         <>
             <GameStart />
-            <Container>
+            <Container className="mt-5">
                 <Row>
                     {players.map((player, i) => {
                         return (
-                            <Col key={i} xs="3" className="text-center mx-auto">
+                            <Col key={i} xs="6" md="4" className="text-center mx-auto">
                                 <PlayerCard player={player} activePlayer={activePlayer} />
                             </Col>
                         )
                     })}
                 </Row>
-                <Row>
+                <Row className="mt-3">
                     <Col className="text-center mx-auto">
                         <button className="btn btn-lg mx-5 btn-success" onClick={() => handleRoll(activePlayer)}>Roll</button>
                         <button className="btn btn-lg mx-5 btn-warning" onClick={() => handleHold(activePlayer)}>Hold</button>
