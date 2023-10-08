@@ -21,13 +21,15 @@ const Winner = () => {
     )
 }
 
-const Main = () => {
+const Main = ({ isConnected }) => {
 
     const players = useSelector(getAllPlayers)
     const activePlayer = useSelector(getActivePlayer)
     const isGameActive = useSelector(getIsGameActive)
     const dispatch = useDispatch()
     const [latestRoll, setLatestRoll] = useState(null)
+
+    console.log(isConnected)
 
     const handleRoll = (activePlayer) => {
         if(!isGameActive) return;
