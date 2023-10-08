@@ -11,8 +11,9 @@ import { setPlayers } from '../features/players/playersSlice'
 import { setIsGameActive } from '../features/game/gameSlice'
 import { NAMES } from '../app/nameGeneration/names'
 import { ADJECTIVES } from '../app/nameGeneration/adjectives'
+import { useEffect } from 'react'
 
-const GameStart = () => {
+const GameStart = ({ socket, isGameActive }) => {
 
     const dispatch = useDispatch()
 
@@ -20,15 +21,39 @@ const GameStart = () => {
     const [playerOneName, setPlayerOneName] = useState('')
     const [playerTwoName, setPlayerTwoName] = useState('')
 
+    useEffect(() => {
+        function onAttemptPlayResponse(response) {
+            switch(response){
+                case 'waiting':
+                    console.log("...Connected waiting for other player...")
+                    break;
+                case 'starting':
+                    dispatch(setIsGameActive({isGameActive: true}))
+                    dispatch(setPlayers({playerNames: [playerOneName, playerTwoName]}))
+                    setIsOpen(false)
+                case 'full':
+                    console.log('Sorry, lobby is full! Try again later.')
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        socket.on('attempt-play-response', onAttemptPlayResponse)
+
+        return () => {
+            socket.off('attempt-play-response', onAttemptPlayResponse)
+        }
+    })
+
     const handleGameStart = () => {
-        if(!playerOneName || !playerTwoName){
-            alert("Please make sure both fields are filled with at least one letter")
+        if(!playerOneName){
+            alert("Please make sure player One's name is filled in")
             return
         }
-        dispatch(setIsGameActive({isGameActive: true}))
-        dispatch(setPlayers({playerNames: [playerOneName, playerTwoName]}))
-        setIsOpen(false)
+        socket.emit('attempt-play', playerOneName)
     }
+    console.log("isGameActive ? " + isGameActive)
 
     const randomizeName = (playerNum) => {
         const randomName = NAMES[Math.floor(Math.random() * NAMES.length)]

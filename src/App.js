@@ -4,28 +4,32 @@ import Main from './components/Main';
 import { socket } from './socket';
 
 function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected)
+    const [isConnected, setIsConnected] = useState(socket.connected)
 
-  useEffect(() => {
-    function onConnect() {
-      setIsConnected(true)
-    }
-    function onDisconnect() {
-      setIsConnected(false)
-    }
+    useEffect(() => {
+        function onConnect() {
+            setIsConnected(true)
+        }
+        function onDisconnect() {
+            setIsConnected(false)
+        }
 
-    socket.on('connect', onConnect)
 
-    return () => {
-      socket.off('connect', onConnect)
-    }
-  }, [])
+        socket.on('connect', onConnect)
 
-  return (
-    <div className="App">
-      <Main isConnected={ isConnected }/>
-    </div>
-  );
+        return () => {
+            socket.off('connect', onConnect)
+        }
+    }, [])
+
+    return (
+        <div className="App">
+            <Main
+                isConnected={isConnected}
+                socket={socket}
+            />
+        </div>
+    );
 }
 
 export default App;
