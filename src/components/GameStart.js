@@ -24,7 +24,7 @@ const GameStart = ({ socket, isGameActive }) => {
 
     useEffect(() => {
         function onAttemptPlayResponse(response) {
-            switch(response){
+            switch(response.msg){
                 case 'waiting':
                     console.log("...Connected waiting for other player...")
                     setConnectionStatus({msg: "...Connected, waiting for other player...", bsColor: "warning"})
@@ -32,7 +32,7 @@ const GameStart = ({ socket, isGameActive }) => {
                 case 'starting':
                     setConnectionStatus({msg: "...Connected! Starting game...", bsColor: "success"})
                     dispatch(setIsGameActive({isGameActive: true}))
-                    dispatch(setPlayers({playerNames: [playerOneName, playerTwoName]}))
+                    dispatch(setPlayers({playerNames: response.playerNames}))
                     setIsOpen(false)
                     break;
                 case 'full':
@@ -53,7 +53,7 @@ const GameStart = ({ socket, isGameActive }) => {
 
     const handleGameStart = () => {
         if(!playerOneName){
-            alert("Please make sure player One's name is filled in")
+            alert("Please make sure player name is filled in")
             return
         }
         socket.emit('attempt-play', playerOneName)
@@ -96,7 +96,7 @@ const GameStart = ({ socket, isGameActive }) => {
                 <p>
                 Screw the directions for now, pick a name.
                 </p>
-                <label htmlFor='playerOne'>Player 1</label><br/>
+                <label htmlFor='playerOne'>Player name</label><br/>
                 <Row>
                     <Col xs='10'>
                         <input id='playerOne' value={playerOneName} className='form-control' type='text' onChange={e => setPlayerOneName(e.target.value)}/>
@@ -105,7 +105,7 @@ const GameStart = ({ socket, isGameActive }) => {
                         <button className='btn' onClick={() => randomizeName(1)}><i className='fa fa-random'></i></button>
                     </Col>
                 </Row>
-                <label className='mt-3' htmlFor='playerTwo'>Player 2</label><br/>
+                {/* <label className='mt-3' htmlFor='playerTwo'>Player 2</label><br/>
                 <Row>
                     <Col xs='10'>
                         <input id='playerTwo' value={playerTwoName} className='form-control' type='text' onChange={e => setPlayerTwoName(e.target.value)}/>
@@ -113,7 +113,7 @@ const GameStart = ({ socket, isGameActive }) => {
                     <Col xs='2'>
                         <button className='btn' onClick={() => randomizeName(2)}><i className='fa fa-random'></i></button>
                     </Col>
-                </Row>
+                </Row> */}
                 <Row className="mt-5">
                     <Col className="text-center">
                         <button onClick={() => handleGameStart()}>Start Game</button>
