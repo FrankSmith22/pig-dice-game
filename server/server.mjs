@@ -1,12 +1,13 @@
 import { Server } from "socket.io"
+import { createServer } from 'http'
 
-const io = new Server({
+const httpServer = createServer()
+
+const io = new Server(4000, {
     cors: {
-        origin: "http://localhost:3000"
+        origin: ["http://localhost:3000", "http://192.168.1.169:3000"]
     }
 })
-
-io.listen(4000)
 
 const users = {}
 
