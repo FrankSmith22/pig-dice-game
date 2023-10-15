@@ -18,26 +18,25 @@ const GameStart = ({ socket, isGameActive }) => {
     const dispatch = useDispatch()
 
     const [isOpen, setIsOpen] = useState(true)
-    const [playerOneName, setPlayerOneName] = useState('')
-    const [playerTwoName, setPlayerTwoName] = useState('')
-    const [connectionStatus, setConnectionStatus] = useState({})
+    const [playerName, setPlayerName] = useState('')
+    const [connStatus, setConnStatus] = useState({})
 
     useEffect(() => {
         function onAttemptPlayResponse(response) {
             switch(response.msg){
                 case 'waiting':
                     console.log("...Connected waiting for other player...")
-                    setConnectionStatus({msg: "...Connected, waiting for other player...", bsColor: "warning"})
+                    setConnStatus({msg: "...Connected, waiting for other player...", bsColor: "warning"})
                     break;
                 case 'starting':
-                    setConnectionStatus({msg: "...Connected! Starting game...", bsColor: "success"})
+                    setConnStatus({msg: "...Connected! Starting game...", bsColor: "success"})
                     dispatch(setIsGameActive({isGameActive: true}))
                     dispatch(setPlayers({playerNames: response.playerNames}))
                     setIsOpen(false)
                     break;
                 case 'full':
                     console.log('Sorry, lobby is full! Try again later.')
-                    setConnectionStatus({msg: 'Sorry, lobby is full! Try again later.', bsColor: "danger"})
+                    setConnStatus({msg: 'Sorry, lobby is full! Try again later.', bsColor: "danger"})
                     break;
                 default:
                     break;
@@ -52,27 +51,24 @@ const GameStart = ({ socket, isGameActive }) => {
     })
 
     const handleGameStart = () => {
-        if(!playerOneName){
+        if(!playerName){
             alert("Please make sure player name is filled in")
             return
         }
-        socket.emit('attempt-play', playerOneName)
+        socket.emit('attempt-play', playerName)
     }
     console.log("isGameActive ? " + isGameActive)
 
-    const randomizeName = (playerNum) => {
+    const randomizeName = () => {
         const randomName = NAMES[Math.floor(Math.random() * NAMES.length)]
         let randomAdjective = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]
 
         randomAdjective = randomAdjective.charAt(0).toUpperCase() + randomAdjective.slice(1)
 
-        switch(playerNum){
-            case 1: setPlayerOneName(`${randomAdjective} ${randomName}`); break;
-            case 2: setPlayerTwoName(`${randomAdjective} ${randomName}`); break;
-        }
+        setPlayerName(`${randomAdjective} ${randomName}`)
     }
 
-    const createConnectionStatusRow = (connStatus) => {
+    const createConnStatusRow = (connStatus) => {
 
         const connStatusIsEmpty = Object.keys(connStatus).length === 0
 
@@ -96,30 +92,21 @@ const GameStart = ({ socket, isGameActive }) => {
                 <p>
                 Screw the directions for now, pick a name.
                 </p>
-                <label htmlFor='playerOne'>Player name</label><br/>
+                <label htmlFor='playerName'>Player name</label><br/>
                 <Row>
                     <Col xs='10'>
-                        <input id='playerOne' value={playerOneName} className='form-control' type='text' onChange={e => setPlayerOneName(e.target.value)}/>
+                        <input id='playerName' value={playerName} className='form-control' type='text' onChange={e => setPlayerName(e.target.value)}/>
                     </Col>
                     <Col xs='2'>
-                        <button className='btn' onClick={() => randomizeName(1)}><i className='fa fa-random'></i></button>
+                        <button className='btn' onClick={() => randomizeName()}><i className='fa fa-random'></i></button>
                     </Col>
                 </Row>
-                {/* <label className='mt-3' htmlFor='playerTwo'>Player 2</label><br/>
-                <Row>
-                    <Col xs='10'>
-                        <input id='playerTwo' value={playerTwoName} className='form-control' type='text' onChange={e => setPlayerTwoName(e.target.value)}/>
-                    </Col>
-                    <Col xs='2'>
-                        <button className='btn' onClick={() => randomizeName(2)}><i className='fa fa-random'></i></button>
-                    </Col>
-                </Row> */}
                 <Row className="mt-5">
                     <Col className="text-center">
                         <button onClick={() => handleGameStart()}>Start Game</button>
                     </Col>
                 </Row>
-                {createConnectionStatusRow(connectionStatus)}
+                {createConnStatusRow(connStatus)}
             </ModalBody>
         </Modal>
     )
