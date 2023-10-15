@@ -20,19 +20,24 @@ const GameStart = ({ socket, isGameActive }) => {
     const [isOpen, setIsOpen] = useState(true)
     const [playerOneName, setPlayerOneName] = useState('')
     const [playerTwoName, setPlayerTwoName] = useState('')
+    const [connectionStatus, setConnectionStatus] = useState({})
 
     useEffect(() => {
         function onAttemptPlayResponse(response) {
             switch(response){
                 case 'waiting':
                     console.log("...Connected waiting for other player...")
+                    setConnectionStatus({msg: "...Connected, waiting for other player...", bsColor: "warning"})
                     break;
                 case 'starting':
+                    setConnectionStatus({msg: "...Connected! Starting game...", bsColor: "success"})
                     dispatch(setIsGameActive({isGameActive: true}))
                     dispatch(setPlayers({playerNames: [playerOneName, playerTwoName]}))
                     setIsOpen(false)
+                    break;
                 case 'full':
                     console.log('Sorry, lobby is full! Try again later.')
+                    setConnectionStatus({msg: 'Sorry, lobby is full! Try again later.', bsColor: "danger"})
                     break;
                 default:
                     break;
@@ -67,6 +72,23 @@ const GameStart = ({ socket, isGameActive }) => {
         }
     }
 
+    const createConnectionStatusRow = (connStatus) => {
+
+        const connStatusIsEmpty = Object.keys(connStatus).length === 0
+
+        const connStatusMsg = connStatusIsEmpty ? "" : connStatus.msg
+        const connStatusColor = connStatusIsEmpty ? "" : connStatus.bsColor
+        return connStatusIsEmpty ? (<></>) : (
+            <Row className="mt-5">
+                <Col className="text-center">
+                    <span
+                        id="conn-status-span"
+                        className={`text-${connStatusColor}`}>{connStatusMsg}</span>
+                </Col>
+            </Row>
+        )
+    }
+
     return (
         <Modal isOpen={isOpen}>
             <ModalHeader>Welcome to Pig! The dice game.</ModalHeader>
@@ -97,6 +119,7 @@ const GameStart = ({ socket, isGameActive }) => {
                         <button onClick={() => handleGameStart()}>Start Game</button>
                     </Col>
                 </Row>
+                {createConnectionStatusRow(connectionStatus)}
             </ModalBody>
         </Modal>
     )

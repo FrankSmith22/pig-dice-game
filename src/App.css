@@ -5,3 +5,11 @@
 .bg-success-light {
     background-color: var(--c-bs-success-lighter);
 }
+
+#conn-status-span {
+    animation: animateFont 2s infinite;
+}
+
+@keyframes animateFont {
+    50% {font-size: 18px;}
+}
