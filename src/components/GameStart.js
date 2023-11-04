@@ -7,7 +7,7 @@ import {
     Row,
     Col
 } from 'reactstrap'
-import { setPlayers } from '../features/players/playersSlice'
+import { setPlayers, setClientPlayer } from '../features/players/playersSlice'
 import { setIsGameActive } from '../features/game/gameSlice'
 import { NAMES } from '../app/nameGeneration/names'
 import { ADJECTIVES } from '../app/nameGeneration/adjectives'
@@ -27,9 +27,11 @@ const GameStart = ({ socket, isGameActive }) => {
                 case 'waiting':
                     console.log("...Connected waiting for other player...")
                     setConnStatus({msg: "...Connected, waiting for other player...", bsColor: "warning"})
+                    dispatch(setClientPlayer(playerName))
                     break;
                 case 'starting':
                     setConnStatus({msg: "...Connected! Starting game...", bsColor: "success"})
+                    dispatch(setClientPlayer(playerName))
                     dispatch(setIsGameActive({isGameActive: true}))
                     dispatch(setPlayers({playerNames: response.playerNames}))
                     setIsOpen(false)
@@ -87,7 +89,7 @@ const GameStart = ({ socket, isGameActive }) => {
 
     return (
         <Modal isOpen={isOpen}>
-            <ModalHeader>Welcome to Pig! The dice game.</ModalHeader>
+            <ModalHeader className='bg-success-light'>Welcome to Pig! The dice game.</ModalHeader>
             <ModalBody>
                 <p>
                 Screw the directions for now, pick a name.

@@ -16,7 +16,7 @@ io.on('connection', socket => {
     socket.on('attempt-play', playerName => {
         console.log(`===\nPlayer name ${playerName} wants to play!`)
         console.log(`Number of users: ${Object.keys(users).length}`)
-        if(Object.keys(users).length === 0) {
+        if(Object.keys(users).length === 0) { // TODO turn this into switch case
             // Tell user to wait till another joins
             console.log("Readied up, waiting for another player to join")
             users[socket.id] = playerName
@@ -32,6 +32,7 @@ io.on('connection', socket => {
             console.log("Readied up, game is starting")
             users[socket.id] = playerName
             io.emit('attempt-play-response', {msg: 'starting', playerNames: Object.values(users)}) // TODO make enum
+            io.emit('set-active-player', Object.values(users)[0])
 
         }
         else if(Object.keys(users).length === 2) {
@@ -40,6 +41,18 @@ io.on('connection', socket => {
             socket.emit('attempt-play-response', {msg: 'full', playerNames: Object.values(users)}) // TODO make enum
         }
         console.log(users)
+    })
+    socket.on('do-roll', activePlayer => {
+        console.log('do-roll request received')
+        const randomNum = Math.ceil(Math.random() * 6)
+        // const randomNum = 1
+        if(randomNum === 1) {
+            // set active player to other player
+            const newActivePlayer = Object.values(users).filter(name => name !== activePlayer)[0]
+            console.log(newActivePlayer)
+            io.emit('set-active-player', newActivePlayer)
+        }
+        io.emit('update-score', {player: activePlayer, updateScore: randomNum})
     })
     socket.on('disconnect', () => {
         delete users[socket.id]

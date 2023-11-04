@@ -15,6 +15,7 @@ const initialState = {
         }
     ],
     activePlayer: "Elegos",
+    clientPlayer: "",
     winner: ""
 }
 
@@ -28,7 +29,13 @@ const playersSlice = createSlice({
                 activePlayer: action.payload.newActivePlayer
             }
         },
-        increaseScore: (state, action) => {
+        setClientPlayer: (state, action) => {
+            return {
+                ...state,
+                clientPlayer: action.payload
+            }
+        },
+        increaseScore: (state, action) => { // TODO should rename this to adjustScore or something, and combined functionality with resetScore
             const newState = {...state}
             const newPlayers = []
             for(const player of newState.players) {
@@ -100,10 +107,12 @@ const playersSlice = createSlice({
 
 export const getActivePlayer = (state) => state.players.activePlayer
 
+export const getClientPlayer = (state) => state.players.clientPlayer
+
 export const getAllPlayers = (state) => state.players.players
 
 export const getWinner = (state) => state.players.winner
 
-export const { setActivePlayer, increaseScore, increaseTotalScore, resetScore, setPlayers } = playersSlice.actions
+export const { setActivePlayer, setClientPlayer, increaseScore, increaseTotalScore, resetScore, setPlayers } = playersSlice.actions
 
 export const playersReducer = playersSlice.reducer

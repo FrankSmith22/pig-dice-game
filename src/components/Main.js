@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import GameStart from "./GameStart";
 import PlayerCard from "../features/players/PlayerCard";
-import { getAllPlayers, getActivePlayer, increaseScore, increaseTotalScore, getWinner, resetScore, setActivePlayer } from "../features/players/playersSlice";
+import { getAllPlayers, getActivePlayer, getClientPlayer, increaseScore, increaseTotalScore, getWinner, resetScore, setActivePlayer } from "../features/players/playersSlice";
 import { getIsGameActive, setIsGameActive } from "../features/game/gameSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Container, Row } from "reactstrap";
@@ -21,29 +21,59 @@ const Winner = () => {
     )
 }
 
-const Main = ({ isConnected, socket }) => {
+const Main = ({ socket }) => {
 
     const players = useSelector(getAllPlayers)
     const activePlayer = useSelector(getActivePlayer)
     const isGameActive = useSelector(getIsGameActive)
+    const clientPlayer = useSelector(getClientPlayer)
     const dispatch = useDispatch()
     const [latestRoll, setLatestRoll] = useState(null)
 
-    const handleRoll = (activePlayer) => {
-        if(!isGameActive) return;
-        const randomNum = Math.ceil(Math.random() * 6)
-        setLatestRoll(randomNum)
-        if(randomNum === 1) {
-            console.log("Oops you rolled a 1!")
-            dispatch(resetScore({activePlayer}))
-            const newActivePlayer = players.find(player => player.name !== activePlayer).name // Yes, this definitely hardcodes the game to be 2 player
+    useEffect(() => {
+        function onNewActivePlayer(newActivePlayer){
+            console.log('received new set-active-player msg from server')
             dispatch(setActivePlayer({newActivePlayer}))
-            return
         }
-        dispatch(increaseScore({
-            activePlayer: activePlayer,
-            increase: randomNum 
-        }))
+        function onUpdateScore({player, updateScore}) {
+            console.log('received new update-score msg from server')
+            if(updateScore === 1){
+                dispatch(resetScore({activePlayer: player}))
+            }
+            else {
+                dispatch(increaseScore({
+                    activePlayer: player,
+                    increase: updateScore
+                }))
+            }
+        }
+
+        socket.on('set-active-player', onNewActivePlayer)
+        socket.on('update-score', onUpdateScore)
+
+        return () => {
+            socket.off('set-active-player', onNewActivePlayer)
+            socket.off('update-score', onUpdateScore)
+        }
+    }, [])
+
+    const handleRoll = (activePlayer) => {
+        console.log('calling handleRoll')
+        if(!isGameActive) return;
+        socket.emit('do-roll', activePlayer)
+        // const randomNum = Math.ceil(Math.random() * 6)
+        // setLatestRoll(randomNum)
+        // if(randomNum === 1) {
+        //     console.log("Oops you rolled a 1!")
+        //     dispatch(resetScore({activePlayer}))
+        //     const newActivePlayer = players.find(player => player.name !== activePlayer).name // Yes, this definitely hardcodes the game to be 2 player
+        //     dispatch(setActivePlayer({newActivePlayer}))
+        //     return
+        // }
+        // dispatch(increaseScore({
+        //     activePlayer: activePlayer,
+        //     increase: randomNum 
+        // }))
     }
     
     const handleHold = (activePlayer) => {
@@ -56,12 +86,15 @@ const Main = ({ isConnected, socket }) => {
 
     // Hot key handling
     const handleKeyPress = useCallback((e) => {
-        // console.log(`${e.key}`)
+        console.log(`${e.key}`)
+        console.log(isGameActive)
+        if(!isGameActive) return;
         switch(e.key){
             case " ": handleRoll(activePlayer); break;
             case "Enter": handleHold(activePlayer); break;
         }
-    }, [isGameActive, activePlayer])
+    // }, [isGameActive, activePlayer, handleRoll, handleHold])
+    }, [isGameActive])
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyPress)
@@ -85,8 +118,20 @@ const Main = ({ isConnected, socket }) => {
                 </Row>
                 <Row className="mt-3">
                     <Col className="text-center mx-auto">
-                        <button className="btn btn-lg mx-5 btn-success" onClick={() => handleRoll(activePlayer)}>Roll</button>
-                        <button className="btn btn-lg mx-5 btn-warning" onClick={() => handleHold(activePlayer)}>Hold</button>
+                        <button
+                            className="btn btn-lg mx-5 btn-success"
+                            disabled={clientPlayer !== activePlayer}
+                            onClick={() => handleRoll(activePlayer)}
+                        >
+                            Roll
+                        </button>
+                        <button
+                            className="btn btn-lg mx-5 btn-warning"
+                            disabled={clientPlayer !== activePlayer}
+                            onClick={() => handleHold(activePlayer)}
+                        >
+                            Hold
+                        </button>
                     </Col>
                 </Row>
                 <Row>
