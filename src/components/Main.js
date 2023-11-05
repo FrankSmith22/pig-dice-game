@@ -41,19 +41,25 @@ const Main = ({ socket }) => {
                 dispatch(resetScore({activePlayer: player}))
             }
             else {
+                setLatestRoll(updateScore)
                 dispatch(increaseScore({
                     activePlayer: player,
                     increase: updateScore
                 }))
             }
         }
+        function onUpdateTotalScore({player, updateTotalScore}){
+            dispatch(increaseTotalScore({activePlayer: player, points: updateTotalScore}))
+        }
 
         socket.on('set-active-player', onNewActivePlayer)
         socket.on('update-score', onUpdateScore)
+        socket.on('update-total-score', onUpdateTotalScore)
 
         return () => {
             socket.off('set-active-player', onNewActivePlayer)
             socket.off('update-score', onUpdateScore)
+            socket.off('update-total-score', onUpdateTotalScore)
         }
     }, [])
 
@@ -77,11 +83,14 @@ const Main = ({ socket }) => {
     }
     
     const handleHold = (activePlayer) => {
+        console.log('calling handleHold')
         if(!isGameActive) return;
-        dispatch(increaseTotalScore({activePlayer}))
-        const newActivePlayer = players.find(player => player.name !== activePlayer).name
-        dispatch(setActivePlayer({newActivePlayer}))
-        setLatestRoll(null)
+        console.log(players)
+        const activePlayerObj = players.find(player => player.name === activePlayer)
+        socket.emit('do-hold', {activePlayer, points: activePlayerObj.score})
+        // dispatch(increaseTotalScore({activePlayer}))
+        // const newActivePlayer = players.find(player => player.name !== activePlayer).name
+        // dispatch(setActivePlayer({newActivePlayer}))
     }
 
     // Hot key handling

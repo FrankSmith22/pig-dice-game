@@ -54,6 +54,14 @@ io.on('connection', socket => {
         }
         io.emit('update-score', {player: activePlayer, updateScore: randomNum})
     })
+    socket.on('do-hold', ({activePlayer, points}) => {
+        console.log('do-hold request received')
+        io.emit('update-score', {player: activePlayer, updateScore: 1}) // will trigger resetScore dispatch client-side
+        io.emit('update-total-score', {player: activePlayer, updateTotalScore: points})
+        const newActivePlayer = Object.values(users).filter(name => name !== activePlayer)[0]
+        io.emit('set-active-player', newActivePlayer)
+        
+    })
     socket.on('disconnect', () => {
         delete users[socket.id]
     })

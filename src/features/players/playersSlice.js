@@ -57,11 +57,12 @@ const playersSlice = createSlice({
         increaseTotalScore: (state, action) => {
             const newState = {...state}
             const newPlayers = []
+            console.log(`From playersslice, action.payload.points: ${action.payload.points}`)
+            console.log(`From playersslice, action.payload.activePlayer: ${action.payload.activePlayer}`)
             for(const player of newState.players) {
                 if (player.name === action.payload.activePlayer) {
                     let newPlayer = {...player}
-                    newPlayer.totalScore += newPlayer.score
-                    newPlayer.score = 0
+                    newPlayer.totalScore += action.payload.points
                     newPlayers.push(newPlayer)
                 }
                 else {
