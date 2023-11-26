@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Col, Container, Row } from "reactstrap";
 import { useCallback } from "react";
 import { useEffect } from "react";
+import { EVENTS as E } from '../app/events'
 
 const Winner = () => {
     const winner = useSelector(getWinner)
@@ -52,21 +53,21 @@ const Main = ({ socket }) => {
             dispatch(increaseTotalScore({activePlayer: player, points: updateTotalScore}))
         }
 
-        socket.on('set-active-player', onNewActivePlayer)
-        socket.on('update-score', onUpdateScore)
-        socket.on('update-total-score', onUpdateTotalScore)
+        socket.on(E.SET_ACTIVE_PLAYER, onNewActivePlayer)
+        socket.on(E.UPDATE_SCORE, onUpdateScore)
+        socket.on(E.UPDATE_TOTAL_SCORE, onUpdateTotalScore)
 
         return () => {
-            socket.off('set-active-player', onNewActivePlayer)
-            socket.off('update-score', onUpdateScore)
-            socket.off('update-total-score', onUpdateTotalScore)
+            socket.off(E.SET_ACTIVE_PLAYER, onNewActivePlayer)
+            socket.off(E.UPDATE_SCORE, onUpdateScore)
+            socket.off(E.UPDATE_TOTAL_SCORE, onUpdateTotalScore)
         }
     }, [])
 
     const handleRoll = (activePlayer) => {
         console.log('calling handleRoll')
         if(!isGameActive) return;
-        socket.emit('do-roll', activePlayer)
+        socket.emit(E.DO_ROLL, activePlayer)
         // const randomNum = Math.ceil(Math.random() * 6)
         // setLatestRoll(randomNum)
         // if(randomNum === 1) {
@@ -87,7 +88,7 @@ const Main = ({ socket }) => {
         if(!isGameActive) return;
         console.log(players)
         const activePlayerObj = players.find(player => player.name === activePlayer)
-        socket.emit('do-hold', {activePlayer, points: activePlayerObj.score})
+        socket.emit(E.DO_HOLD, {activePlayer, points: activePlayerObj.score})
         // dispatch(increaseTotalScore({activePlayer}))
         // const newActivePlayer = players.find(player => player.name !== activePlayer).name
         // dispatch(setActivePlayer({newActivePlayer}))

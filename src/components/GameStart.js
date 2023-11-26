@@ -12,6 +12,7 @@ import { setIsGameActive } from '../features/game/gameSlice'
 import { NAMES } from '../app/nameGeneration/names'
 import { ADJECTIVES } from '../app/nameGeneration/adjectives'
 import { useEffect } from 'react'
+import { EVENTS as E } from '../app/events'
 
 const GameStart = ({ socket, isGameActive }) => {
 
@@ -24,19 +25,19 @@ const GameStart = ({ socket, isGameActive }) => {
     useEffect(() => {
         function onAttemptPlayResponse(response) {
             switch(response.msg){
-                case 'waiting':
+                case E.ATTEMPT_PLAY_RESPONSE_TYPES.WAITING:
                     console.log("...Connected waiting for other player...")
                     setConnStatus({msg: "...Connected, waiting for other player...", bsColor: "warning"})
                     dispatch(setClientPlayer(playerName))
                     break;
-                case 'starting':
+                case E.ATTEMPT_PLAY_RESPONSE_TYPES.STARTING:
                     setConnStatus({msg: "...Connected! Starting game...", bsColor: "success"})
                     dispatch(setClientPlayer(playerName))
                     dispatch(setIsGameActive({isGameActive: true}))
                     dispatch(setPlayers({playerNames: response.playerNames}))
                     setIsOpen(false)
                     break;
-                case 'full':
+                case E.ATTEMPT_PLAY_RESPONSE_TYPES.FULL:
                     console.log('Sorry, lobby is full! Try again later.')
                     setConnStatus({msg: 'Sorry, lobby is full! Try again later.', bsColor: "danger"})
                     break;
@@ -45,10 +46,10 @@ const GameStart = ({ socket, isGameActive }) => {
             }
         }
 
-        socket.on('attempt-play-response', onAttemptPlayResponse)
+        socket.on(E.ATTEMPT_PLAY_RESPONSE, onAttemptPlayResponse)
 
         return () => {
-            socket.off('attempt-play-response', onAttemptPlayResponse)
+            socket.off(E.ATTEMPT_PLAY_RESPONSE, onAttemptPlayResponse)
         }
     })
 
@@ -57,7 +58,7 @@ const GameStart = ({ socket, isGameActive }) => {
             alert("Please make sure player name is filled in")
             return
         }
-        socket.emit('attempt-play', playerName)
+        socket.emit(E.ATTEMPT_PLAY, playerName)
     }
     console.log("isGameActive ? " + isGameActive)
 

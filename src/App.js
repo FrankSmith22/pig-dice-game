@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Main from './components/Main';
 import { socket } from './socket';
+import {EVENTS as E} from './app/events'
 
 function App() {
     const [isConnected, setIsConnected] = useState(socket.connected)
@@ -15,10 +16,10 @@ function App() {
         }
 
 
-        socket.on('connect', onConnect)
+        socket.on(E.CONNECT, onConnect)
 
         return () => {
-            socket.off('connect', onConnect)
+            socket.off(E.CONNECT, onConnect)
         }
     }, [])
 
