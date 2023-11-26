@@ -53,14 +53,21 @@ const Main = ({ socket }) => {
             dispatch(increaseTotalScore({activePlayer: player, points: updateTotalScore}))
         }
 
+        function onPlayerDisconnect(){
+            setIsGameActive({isGameActive: false})
+            // TODO: Let user know that opponent has disconnected
+        }
+
         socket.on(E.SET_ACTIVE_PLAYER, onNewActivePlayer)
         socket.on(E.UPDATE_SCORE, onUpdateScore)
         socket.on(E.UPDATE_TOTAL_SCORE, onUpdateTotalScore)
+        socket.on(E.PLAYER_DISCONNECT, onPlayerDisconnect)
 
         return () => {
             socket.off(E.SET_ACTIVE_PLAYER, onNewActivePlayer)
             socket.off(E.UPDATE_SCORE, onUpdateScore)
             socket.off(E.UPDATE_TOTAL_SCORE, onUpdateTotalScore)
+            socket.off(E.PLAYER_DISCONNECT, onPlayerDisconnect)
         }
     }, [])
 

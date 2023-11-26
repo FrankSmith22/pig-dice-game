@@ -16,10 +16,10 @@ function App() {
         }
 
 
-        socket.on(E.CONNECT, onConnect)
+        socket.on(E.PLAYER_CONNECT, onConnect)
 
         return () => {
-            socket.off(E.CONNECT, onConnect)
+            socket.off(E.PLAYER_CONNECT, onConnect)
         }
     }, [])
 
