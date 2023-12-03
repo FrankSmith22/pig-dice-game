@@ -16,6 +16,8 @@ import { EVENTS as E } from '../app/events'
 
 const GameStart = ({ socket, isGameActive }) => {
 
+    const CONNECTED_MSG = "Connected, waiting for other player..."
+
     const dispatch = useDispatch()
 
     const [isOpen, setIsOpen] = useState(true)
@@ -26,12 +28,11 @@ const GameStart = ({ socket, isGameActive }) => {
         function onAttemptPlayResponse(response) {
             switch(response.msg){
                 case E.ATTEMPT_PLAY_RESPONSE_TYPES.WAITING:
-                    console.log("...Connected waiting for other player...")
-                    setConnStatus({msg: "...Connected, waiting for other player...", bsColor: "warning"})
+                    setConnStatus({msg: CONNECTED_MSG, bsColor: "warning"})
                     dispatch(setClientPlayer(playerName))
                     break;
                 case E.ATTEMPT_PLAY_RESPONSE_TYPES.STARTING:
-                    setConnStatus({msg: "...Connected! Starting game...", bsColor: "success"})
+                    setConnStatus({msg: "Connected! Starting game...", bsColor: "success"})
                     dispatch(setClientPlayer(playerName))
                     dispatch(setIsGameActive({isGameActive: true}))
                     dispatch(setPlayers({playerNames: response.playerNames}))
@@ -58,9 +59,14 @@ const GameStart = ({ socket, isGameActive }) => {
             alert("Please make sure player name is filled in")
             return
         }
+        if(connStatus.msg != CONNECTED_MSG){
+            setConnStatus({
+                msg: "Connecting to server...",
+                bsColor: "primary"
+            })
+        }
         socket.emit(E.ATTEMPT_PLAY, playerName)
     }
-    console.log("isGameActive ? " + isGameActive)
 
     const randomizeName = () => {
         const randomName = NAMES[Math.floor(Math.random() * NAMES.length)]
