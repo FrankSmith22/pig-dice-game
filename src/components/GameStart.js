@@ -99,10 +99,14 @@ const GameStart = ({ socket, isGameActive }) => {
 
     return (
         <Modal isOpen={isOpen}>
-            <ModalHeader className='bg-success-light'>Welcome to Pig! The dice game.</ModalHeader>
+            <ModalHeader className='bg-success-light text-center'><b>Welcome to Pig! The dice game</b></ModalHeader>
             <ModalBody>
                 <p>
-                Screw the directions for now, pick a name.
+                Pig is a simple dice game first described in print by John Scarne in 1945.
+                Players take turns to roll a single dice as many times as they wish,
+                adding all roll results to a running total, but losing their gained score for the turn if they roll a 1.
+                <br/><br/>
+                <b>First to 100 points wins!</b>
                 </p>
                 <label htmlFor='playerName'>Player name</label><br/>
                 <Row>

@@ -1,3 +1,7 @@
+body {
+    font-family: 'Inter', sans-serif !important; 
+}
+
 :root {
     --c-bs-success-lighter: #87d6b1;
 }
@@ -8,6 +12,11 @@
 
 #conn-status-span {
     animation: animateFont 2s infinite;
+}
+
+/* Center GameStart modal-title */
+.modal-header h5 {
+    width: 100%
 }
 
 @keyframes animateFont {
