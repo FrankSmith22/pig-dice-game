@@ -13,6 +13,7 @@ import { NAMES } from '../app/nameGeneration/names'
 import { ADJECTIVES } from '../app/nameGeneration/adjectives'
 import { useEffect } from 'react'
 import { EVENTS as E } from '../app/events'
+import Loading from './Loading'
 
 const GameStart = ({ socket, isGameActive }) => {
 
@@ -86,9 +87,11 @@ const GameStart = ({ socket, isGameActive }) => {
         return connStatusIsEmpty ? (<></>) : (
             <Row className="mt-5">
                 <Col className="text-center">
+                    {connStatus.msg != CONNECTED_MSG ? <Loading pxSize="25"/> : <></>}
                     <span
                         id="conn-status-span"
-                        className={`text-${connStatusColor}`}>{connStatusMsg}</span>
+                        className={`text-${connStatusColor}`}
+                    >{connStatusMsg}</span>
                 </Col>
             </Row>
         )
