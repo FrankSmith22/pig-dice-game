@@ -98,8 +98,8 @@ const GameStart = ({ socket, isGameActive }) => {
     }
 
     return (
-        <Modal isOpen={isOpen}>
-            <ModalHeader className='bg-success-light text-center'><b>Welcome to Pig! The dice game</b></ModalHeader>
+        <Modal isOpen={isOpen} className="transparent-shadowed-modal">
+            <ModalHeader className='text-center'><b>Welcome to Pig! The dice game</b></ModalHeader>
             <ModalBody>
                 <p>
                 Pig is a simple dice game first described in print by John Scarne in 1945.
@@ -114,12 +114,12 @@ const GameStart = ({ socket, isGameActive }) => {
                         <input id='playerName' value={playerName} className='form-control' type='text' onChange={e => setPlayerName(e.target.value)}/>
                     </Col>
                     <Col xs='2'>
-                        <button className='btn' onClick={() => randomizeName()}><i className='fa fa-random'></i></button>
+                        <button className='btn transparent-shadowed-container' onClick={() => randomizeName()}><i className='fa fa-random'></i></button>
                     </Col>
                 </Row>
                 <Row className="mt-5">
                     <Col className="text-center">
-                        <button onClick={() => handleGameStart()}>Start Game</button>
+                        <button className="btn transparent-shadowed-container" onClick={() => handleGameStart()}>Start Game</button>
                     </Col>
                 </Row>
                 {createConnStatusRow(connStatus)}

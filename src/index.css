@@ -1,20 +1,31 @@
 .player-card{
     height: 10em;
+}
+
+.transparent-shadowed-container{
     background: rgba(0,0,0,0.1);
     color: rgb(255, 255, 255);
     transition: box-shadow 0.3s ease-in-out;
+    transition: background 0.3s ease-in-out;
+    border: 1px solid rgb(255, 255, 255);
+}
+
+.transparent-shadowed-modal .modal-content{
+    background: rgba(0,0,0,0.2);
+    color: rgb(255, 255, 255);
+    transition: box-shadow 0.3s ease-in-out;
+    transition: background 0.3s ease-in-out;
+    border: 1px solid rgb(255, 255, 255);
 }
 
 .inactive-player{
     box-shadow: 3px 3px 10px 0px #5b5b5b;
+    background: rgba(0,0,0,0.1);
 }
 
-.active-player{
+.active-player, .active-player:focus{
     box-shadow: 15px 15px 10px 0px #5b5b5b;
-}
-
-.border-gray{
-    border-color: gray;
+    background: rgba(0,0,0,0.2);
 }
 
 :root {

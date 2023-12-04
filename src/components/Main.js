@@ -31,6 +31,8 @@ const Main = ({ socket }) => {
     const dispatch = useDispatch()
     const [latestRoll, setLatestRoll] = useState(null)
 
+    const isClientPlayerActive = clientPlayer === activePlayer
+
     useEffect(() => {
         function onNewActivePlayer(newActivePlayer){
             console.log('received new set-active-player msg from server')
@@ -126,6 +128,11 @@ const Main = ({ socket }) => {
             <GameStart socket={ socket } isGameActive={isGameActive} />
             <Container className="mt-5">
                 <Row>
+                    <Col className="text-center mx-auto text-white" style={{fontSize: "50px"}}>
+                        <span style={latestRoll === 1 ? {color: "red"} : {}}>{latestRoll ? latestRoll : "___"}</span>
+                    </Col>
+                </Row>
+                <Row>
                     {players.map((player, i) => {
                         return (
                             <Col key={i} xs="6" md="4" className="text-center mx-auto">
@@ -135,26 +142,21 @@ const Main = ({ socket }) => {
                     })}
                 </Row>
                 <Row className="mt-3">
-                    <Col className="text-center mx-auto">
+                    <Col className="text-center mx-auto mt-3">
                         <button
-                            className="btn btn-lg mx-5 btn-success"
-                            disabled={clientPlayer !== activePlayer}
+                            className={`btn btn-lg mx-5 transparent-shadowed-container ${isClientPlayerActive ? "active-player" : "inactive-player"}`}
+                            disabled={!isClientPlayerActive}
                             onClick={() => handleRoll(activePlayer)}
                         >
                             Roll
                         </button>
                         <button
-                            className="btn btn-lg mx-5 btn-warning"
-                            disabled={clientPlayer !== activePlayer}
+                            className={`btn btn-lg mx-5 transparent-shadowed-container ${isClientPlayerActive ? "active-player" : "inactive-player"}`}
+                            disabled={!isClientPlayerActive}
                             onClick={() => handleHold(activePlayer)}
                         >
                             Hold
                         </button>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col className="text-center mx-auto mt-3" style={{fontSize: "50px"}}>
-                        <span style={latestRoll === 1 ? {color: "red"} : {}}>{latestRoll ? latestRoll : "___"}</span>
                     </Col>
                 </Row>
                 <Row>

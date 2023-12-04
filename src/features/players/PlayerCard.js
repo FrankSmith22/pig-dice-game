@@ -10,11 +10,11 @@ const PlayerCard = ({ player, activePlayer }) => {
 
     return (
         <Card className={
-            `player-card ${isActivePlayer ? "active-player" : "inactive-player"} border border-gray`
+            `transparent-shadowed-container player-card ${isActivePlayer ? "active-player" : "inactive-player"}`
         }>
             <CardHeader>{player.name}</CardHeader>
             <CardBody>
-                score: {player.score} <br />
+                score: {player.score} <br/><br/>
                 total score: {player.totalScore}
             </CardBody>
         </Card>
