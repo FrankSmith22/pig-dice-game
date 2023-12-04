@@ -6,10 +6,14 @@ import {
 
 const PlayerCard = ({ player, activePlayer }) => {
 
+    const isActivePlayer = player.name === activePlayer
+
     return (
-        <Card>
-            <CardHeader className={player.name === activePlayer ? "bg-success" : ""}>{player.name}</CardHeader>
-            <CardBody className={player.name === activePlayer ? "bg-success-light" : ""}>
+        <Card className={
+            `player-card ${isActivePlayer ? "active-player" : "inactive-player"} border border-gray`
+        }>
+            <CardHeader>{player.name}</CardHeader>
+            <CardBody>
                 score: {player.score} <br />
                 total score: {player.totalScore}
             </CardBody>

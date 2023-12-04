@@ -109,6 +109,7 @@ const Main = ({ socket }) => {
         switch(e.key){
             case " ": handleRoll(activePlayer); break;
             case "Enter": handleHold(activePlayer); break;
+            default: break;
         }
     // }, [isGameActive, activePlayer, handleRoll, handleHold])
     }, [isGameActive])

@@ -60,7 +60,7 @@ const GameStart = ({ socket, isGameActive }) => {
             alert("Please make sure player name is filled in")
             return
         }
-        if(connStatus.msg != CONNECTED_MSG){
+        if(connStatus.msg !== CONNECTED_MSG){
             setConnStatus({
                 msg: "Connecting to server...",
                 bsColor: "primary"
@@ -87,7 +87,7 @@ const GameStart = ({ socket, isGameActive }) => {
         return connStatusIsEmpty ? (<></>) : (
             <Row className="mt-5">
                 <Col className="text-center">
-                    {connStatus.msg != CONNECTED_MSG ? <Loading pxSize="25"/> : <></>}
+                    {connStatus.msg !== CONNECTED_MSG ? <Loading pxSize="25"/> : <></>}
                     <span
                         id="conn-status-span"
                         className={`text-${connStatusColor}`}
