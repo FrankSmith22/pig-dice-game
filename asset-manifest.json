@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/pig-dice-game/static/css/main.aca1f698.css",
-    "main.js": "/pig-dice-game/static/js/main.1b281aac.js",
+    "main.css": "/pig-dice-game/static/css/main.f88d6756.css",
+    "main.js": "/pig-dice-game/static/js/main.5a238209.js",
     "static/js/787.f3772984.chunk.js": "/pig-dice-game/static/js/787.f3772984.chunk.js",
     "static/media/fontawesome-webfont.svg?v=4.7.0": "/pig-dice-game/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
     "static/media/fontawesome-webfont.eot": "/pig-dice-game/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
@@ -10,12 +10,12 @@
     "static/media/fontawesome-webfont.woff?v=4.7.0": "/pig-dice-game/static/media/fontawesome-webfont.f691f37e57f04c152e23.woff",
     "static/media/fontawesome-webfont.woff2?v=4.7.0": "/pig-dice-game/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
     "index.html": "/pig-dice-game/index.html",
-    "main.aca1f698.css.map": "/pig-dice-game/static/css/main.aca1f698.css.map",
-    "main.1b281aac.js.map": "/pig-dice-game/static/js/main.1b281aac.js.map",
+    "main.f88d6756.css.map": "/pig-dice-game/static/css/main.f88d6756.css.map",
+    "main.5a238209.js.map": "/pig-dice-game/static/js/main.5a238209.js.map",
     "787.f3772984.chunk.js.map": "/pig-dice-game/static/js/787.f3772984.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.aca1f698.css",
-    "static/js/main.1b281aac.js"
+    "static/css/main.f88d6756.css",
+    "static/js/main.5a238209.js"
   ]
 }
