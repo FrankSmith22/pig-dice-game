@@ -1,26 +1,14 @@
 import React, { useState } from "react";
 import GameStart from "./GameStart";
 import PlayerCard from "../features/players/PlayerCard";
-import { getAllPlayers, getActivePlayer, getClientPlayer, increaseScore, increaseTotalScore, getWinner, resetScore, setActivePlayer } from "../features/players/playersSlice";
+import { getAllPlayers, getActivePlayer, getClientPlayer, increaseScore, increaseTotalScore, resetScore, setActivePlayer } from "../features/players/playersSlice";
 import { getIsGameActive, setIsGameActive } from "../features/game/gameSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Container, Row } from "reactstrap";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { EVENTS as E } from '../app/events'
-
-const Winner = () => {
-    const winner = useSelector(getWinner)
-    const dispatch = useDispatch()
-
-    if(winner){
-        dispatch(setIsGameActive({isGameActive: false}))
-    }
-
-    return (
-        <span>{winner ? `The winner is ${winner}!` : ""}</span>
-    )
-}
+import Winner from "./Winner";
 
 const Main = ({ socket }) => {
 
@@ -113,7 +101,6 @@ const Main = ({ socket }) => {
             case "Enter": handleHold(activePlayer); break;
             default: break;
         }
-    // }, [isGameActive, activePlayer, handleRoll, handleHold])
     }, [isGameActive])
 
     useEffect(() => {
@@ -161,7 +148,7 @@ const Main = ({ socket }) => {
                 </Row>
                 <Row>
                     <Col className="text-center mx-auto mt-3" >
-                        <Winner />
+                        <Winner socket={socket} clientPlayer={clientPlayer}/>
                     </Col>
                 </Row>
             </Container>

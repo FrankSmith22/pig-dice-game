@@ -19,7 +19,7 @@
 }
 
 .inactive-player{
-    box-shadow: 3px 3px 10px 0px #5b5b5b;
+    box-shadow: inset 3px 3px 10px 0px #5b5b5b;
     background: rgba(0,0,0,0.1);
 }
 
