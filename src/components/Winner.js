@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setIsGameActive } from "../features/game/gameSlice";
 import { EVENTS as E } from '../app/events'
 
-const Winner = ({ socket, clientPlayer }) => {
+const Winner = ({ socket }) => {
     const winner = useSelector(getWinner)
     const dispatch = useDispatch()
 
     const handleRematch = () => {
-        socket.emit(E.ATTEMPT_REMATCH, clientPlayer)
+        socket.emit(E.ATTEMPT_REMATCH)
     }
 
     if(winner){

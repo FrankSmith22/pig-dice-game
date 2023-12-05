@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import GameStart from "./GameStart";
 import PlayerCard from "../features/players/PlayerCard";
-import { getAllPlayers, getActivePlayer, getClientPlayer, increaseScore, increaseTotalScore, resetScore, setActivePlayer } from "../features/players/playersSlice";
+import { getAllPlayers, getActivePlayer, getClientPlayer, increaseScore, increaseTotalScore, resetScore, resetGame, setActivePlayer } from "../features/players/playersSlice";
 import { getIsGameActive, setIsGameActive } from "../features/game/gameSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Container, Row } from "reactstrap";
@@ -41,23 +41,32 @@ const Main = ({ socket }) => {
         }
         function onUpdateTotalScore({player, updateTotalScore}){
             dispatch(increaseTotalScore({activePlayer: player, points: updateTotalScore}))
+            setLatestRoll(null)
         }
 
         function onPlayerDisconnect(){
-            setIsGameActive({isGameActive: false})
+            dispatch(setIsGameActive({isGameActive: false}))
             // TODO: Let user know that opponent has disconnected
+        }
+
+        function onBeginRematch(){
+            dispatch(setIsGameActive({isGameActive: true}))
+            dispatch(resetGame())
+            setLatestRoll(null)
         }
 
         socket.on(E.SET_ACTIVE_PLAYER, onNewActivePlayer)
         socket.on(E.UPDATE_SCORE, onUpdateScore)
         socket.on(E.UPDATE_TOTAL_SCORE, onUpdateTotalScore)
         socket.on(E.PLAYER_DISCONNECT, onPlayerDisconnect)
+        socket.on(E.BEGIN_REMATCH, onBeginRematch)
 
         return () => {
             socket.off(E.SET_ACTIVE_PLAYER, onNewActivePlayer)
             socket.off(E.UPDATE_SCORE, onUpdateScore)
             socket.off(E.UPDATE_TOTAL_SCORE, onUpdateTotalScore)
             socket.off(E.PLAYER_DISCONNECT, onPlayerDisconnect)
+            socket.off(E.BEGIN_REMATCH, onBeginRematch)
         }
     }, [])
 
@@ -148,7 +157,7 @@ const Main = ({ socket }) => {
                 </Row>
                 <Row>
                     <Col className="text-center mx-auto mt-3" >
-                        <Winner socket={socket} clientPlayer={clientPlayer}/>
+                        <Winner socket={socket}/>
                     </Col>
                 </Row>
             </Container>
