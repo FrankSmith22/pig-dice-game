@@ -18,6 +18,7 @@ const Main = ({ socket }) => {
     const clientPlayer = useSelector(getClientPlayer)
     const dispatch = useDispatch()
     const [latestRoll, setLatestRoll] = useState(null)
+    const [rematchPlayer, setRematchPlayer] = useState("")
 
     const isClientPlayerActive = clientPlayer === activePlayer
 
@@ -53,12 +54,18 @@ const Main = ({ socket }) => {
             dispatch(setIsGameActive({isGameActive: true}))
             dispatch(resetGame())
             setLatestRoll(null)
+            setRematchPlayer("")
+        }
+
+        function handlePlayerWantsRematch(playerName){
+            setRematchPlayer(playerName)
         }
 
         socket.on(E.SET_ACTIVE_PLAYER, onNewActivePlayer)
         socket.on(E.UPDATE_SCORE, onUpdateScore)
         socket.on(E.UPDATE_TOTAL_SCORE, onUpdateTotalScore)
         socket.on(E.PLAYER_DISCONNECT, onPlayerDisconnect)
+        socket.on(E.PLAYER_WANTS_REMATCH, handlePlayerWantsRematch)
         socket.on(E.BEGIN_REMATCH, onBeginRematch)
 
         return () => {
@@ -66,6 +73,7 @@ const Main = ({ socket }) => {
             socket.off(E.UPDATE_SCORE, onUpdateScore)
             socket.off(E.UPDATE_TOTAL_SCORE, onUpdateTotalScore)
             socket.off(E.PLAYER_DISCONNECT, onPlayerDisconnect)
+            socket.off(E.PLAYER_WANTS_REMATCH, handlePlayerWantsRematch)
             socket.off(E.BEGIN_REMATCH, onBeginRematch)
         }
     }, [])
@@ -157,7 +165,7 @@ const Main = ({ socket }) => {
                 </Row>
                 <Row>
                     <Col className="text-center mx-auto mt-3" >
-                        <Winner socket={socket}/>
+                        <Winner socket={socket} clientPlayer={clientPlayer} rematchPlayer={rematchPlayer}/>
                     </Col>
                 </Row>
             </Container>

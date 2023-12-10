@@ -3,8 +3,9 @@ import { Button } from 'reactstrap';
 import { useDispatch, useSelector } from "react-redux";
 import { setIsGameActive } from "../features/game/gameSlice";
 import { EVENTS as E } from '../app/events'
+import { useEffect } from "react";
 
-const Winner = ({ socket }) => {
+const Winner = ({ socket, clientPlayer, rematchPlayer }) => {
     const winner = useSelector(getWinner)
     const dispatch = useDispatch()
 
@@ -20,7 +21,9 @@ const Winner = ({ socket }) => {
         <>
             <span>{`The winner is ${winner}!`}</span>
             <br/>
-            <Button className="transparent-shadowed-container active-player" onClick={()=>{handleRematch()}}>Rematch</Button>
+            <Button disabled={rematchPlayer === clientPlayer} className="transparent-shadowed-container active-player" onClick={()=>{handleRematch()}}>Rematch</Button>
+            <br/><br/>
+            {rematchPlayer ? <span>{rematchPlayer} would like to play again!</span> : <></>}
         </>
     ) : (
         <>
