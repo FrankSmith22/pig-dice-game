@@ -27,14 +27,15 @@ const Main = ({ socket }) => {
         function onNewActivePlayer(newActivePlayer){
             console.log('received new set-active-player msg from server')
             dispatch(setActivePlayer({newActivePlayer}))
+            setLatestRoll(null)
         }
         function onUpdateScore({player, updateScore}) {
             console.log('received new update-score msg from server')
+            setLatestRoll(updateScore)
             if(updateScore === 1){
                 dispatch(resetScore({activePlayer: player}))
             }
             else {
-                setLatestRoll(updateScore)
                 dispatch(increaseScore({
                     activePlayer: player,
                     increase: updateScore
@@ -154,15 +155,15 @@ const Main = ({ socket }) => {
                 <Row className="mt-3">
                     <Col className="text-center mx-auto mt-3">
                         <button
-                            className={`btn btn-lg mx-5 transparent-shadowed-container ${isClientPlayerActive ? "active-player" : "inactive-player"}`}
-                            disabled={!isClientPlayerActive}
+                            className={`btn btn-lg mx-5 transparent-shadowed-container ${isClientPlayerActive && latestRoll !== 1 ? "active-player" : "inactive-player"}`}
+                            disabled={!isClientPlayerActive || latestRoll === 1}
                             onClick={() => handleRoll(activePlayer)}
                         >
                             Roll
                         </button>
                         <button
-                            className={`btn btn-lg mx-5 transparent-shadowed-container ${isClientPlayerActive ? "active-player" : "inactive-player"}`}
-                            disabled={!isClientPlayerActive}
+                            className={`btn btn-lg mx-5 transparent-shadowed-container ${isClientPlayerActive && latestRoll !== 1 ? "active-player" : "inactive-player"}`}
+                            disabled={!isClientPlayerActive || latestRoll === 1}
                             onClick={() => handleHold(activePlayer)}
                         >
                             Hold
