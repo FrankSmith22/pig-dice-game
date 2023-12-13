@@ -21,8 +21,6 @@ const Main = ({ socket }) => {
     const [latestRoll, setLatestRoll] = useState(null)
     const [rematchPlayer, setRematchPlayer] = useState("")
 
-    const isClientPlayerActive = clientPlayer === activePlayer
-
     useEffect(() => {
         function onNewActivePlayer(newActivePlayer){
             console.log('received new set-active-player msg from server')
@@ -128,6 +126,9 @@ const Main = ({ socket }) => {
             document.removeEventListener('keyup', handleKeyPress)
         }
     }, [handleKeyPress])
+
+    // Not anything state related, just a shorthand for a comparison for down below
+    const isClientPlayerActive = clientPlayer === activePlayer
 
     return (
         <>
