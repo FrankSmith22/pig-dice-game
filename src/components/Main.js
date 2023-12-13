@@ -9,6 +9,7 @@ import { useCallback } from "react";
 import { useEffect } from "react";
 import { EVENTS as E } from '../app/events'
 import Winner from "./Winner";
+import Dice from "./Dice";
 
 const Main = ({ socket }) => {
 
@@ -129,8 +130,13 @@ const Main = ({ socket }) => {
 
     return (
         <>
-            <GameStart socket={ socket } isGameActive={isGameActive} />
+            {/* <GameStart socket={ socket } isGameActive={isGameActive} /> */}
             <Container className="mt-5">
+                <Row className="mt-5">
+                    <Col xs="12" className="text-center mx-auto">
+                        <Dice/>
+                    </Col>
+                </Row>
                 <Row>
                     <Col className="text-center mx-auto text-white" style={{fontSize: "50px"}}>
                         <span style={latestRoll === 1 ? {color: "red"} : {}}>{latestRoll ? latestRoll : "___"}</span>
