@@ -130,11 +130,11 @@ const Main = ({ socket }) => {
 
     return (
         <>
-            {/* <GameStart socket={ socket } isGameActive={isGameActive} /> */}
+            <GameStart socket={ socket } isGameActive={isGameActive} />
             <Container className="mt-5">
                 <Row className="mt-5">
                     <Col xs="12" className="text-center mx-auto">
-                        <Dice/>
+                        <Dice side={latestRoll}/>
                     </Col>
                 </Row>
                 <Row>
