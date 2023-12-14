@@ -20,6 +20,7 @@ const Main = ({ socket }) => {
     const dispatch = useDispatch()
     const [latestRoll, setLatestRoll] = useState(null)
     const [rematchPlayer, setRematchPlayer] = useState("")
+    const [prevRoll, setPrevRoll] = useState(undefined)
 
     useEffect(() => {
         function onNewActivePlayer(newActivePlayer){
@@ -29,6 +30,8 @@ const Main = ({ socket }) => {
         }
         function onUpdateScore({player, updateScore}) {
             console.log('received new update-score msg from server')
+            // setPrevRoll(latestRoll) // TODO: investigate this and see why this doesn't allow us to do the bounce on both screens when latest and prev are the same
+            // It will probably need a force rerender situation
             setLatestRoll(updateScore)
             if(updateScore === 1){
                 dispatch(resetScore({activePlayer: player}))
@@ -81,6 +84,7 @@ const Main = ({ socket }) => {
     const handleRoll = (activePlayer) => {
         console.log('calling handleRoll')
         if(!isGameActive) return;
+        setPrevRoll(latestRoll)
         socket.emit(E.DO_ROLL, activePlayer)
         // const randomNum = Math.ceil(Math.random() * 6)
         // setLatestRoll(randomNum)
@@ -136,7 +140,7 @@ const Main = ({ socket }) => {
             <Container className="mt-5">
                 <Row className="mt-5">
                     <Col xs="12" className="text-center mx-auto">
-                        <Dice side={latestRoll} isGameActive={isGameActive}/>
+                        <Dice prevRoll={prevRoll} side={latestRoll} isGameActive={isGameActive} />
                     </Col>
                 </Row>
                 <Row>

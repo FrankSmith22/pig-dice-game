@@ -1,4 +1,4 @@
-const Dice = ({ side, isGameActive }) => {
+const Dice = ({ prevRoll, side, isGameActive }) => {
 
     let rotation = ""
     switch(side){
@@ -18,8 +18,15 @@ const Dice = ({ side, isGameActive }) => {
                 break;
     }
 
+    console.log(`=================SIDE: ${side}`)
+    console.log(`=================PREV SIDE: ${prevRoll}`)
+    console.log(`new roll same as prev roll: ${prevRoll === side && prevRoll !== null}`)
+
+    const rollSameAsPrev = prevRoll === side && prevRoll !== null
+
     return(
-        <div className="dice mx-auto" style={ 
+        <div className="dice mx-auto" style={
+                rollSameAsPrev ? {transform: rotation, animation: "bounce 0.5s cubic-bezier(0, 0.6, 0.58, 1)"} :
                 rotation ? {transform: rotation} : 
                 !isGameActive ? {animation: "rotate 5s linear infinite"} : {animation: "settle 0.5s linear"}
         }>

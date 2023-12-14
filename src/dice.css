@@ -95,6 +95,20 @@
     }
 }
 
+@keyframes bounce {
+    0% { top: 0% }
+    10% { top: -40% }
+    20% { top: 0% }
+    30% { top: -20% }
+    40% { top: 0% }
+    50% { top: -10% }
+    60% { top: 0% }
+    70% { top: -5% }
+    80% { top: 0% }
+    90% { top: -2.5% }
+    100% { top: 0% }
+}
+
 @keyframes settle {
     from {
         transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg);
