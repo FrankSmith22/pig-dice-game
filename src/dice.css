@@ -85,7 +85,7 @@
     box-shadow: #000 -25px -25px 0px 0px, #000 -25px 0px 0px 0px, #000 -25px 25px 0px 0px, #000 25px -25px 0px 0px, #000 25px 0px 0px 0px, #000 25px 25px 0px 0px;
 }
 
-/* @keyframes rotate {
+@keyframes rotate {
     from {
         transform: rotateY(0) rotateX(30deg) rotateZ(30deg);
     }
@@ -93,4 +93,13 @@
     to {
         transform: rotateY(360deg) rotateX(30deg) rotateZ(30deg);
     }
-} */
+}
+
+@keyframes settle {
+    from {
+        transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg);
+    }
+    to {
+        transform: rotateY(180deg) rotateX(135deg) rotateZ(315deg);
+    }
+}

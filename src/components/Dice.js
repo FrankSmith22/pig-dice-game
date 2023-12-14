@@ -1,4 +1,4 @@
-const Dice = ({ side }) => {
+const Dice = ({ side, isGameActive }) => {
 
     let rotation = ""
     switch(side){
@@ -19,7 +19,10 @@ const Dice = ({ side }) => {
     }
 
     return(
-        <div className="dice mx-auto" style={ rotation ? {transform: rotation} : {}}>
+        <div className="dice mx-auto" style={ 
+                rotation ? {transform: rotation} : 
+                !isGameActive ? {animation: "rotate 5s linear infinite"} : {animation: "settle 0.5s linear"}
+        }>
             <div className="side one"/>
             <div className="side two"/>
             <div className="side three"/>

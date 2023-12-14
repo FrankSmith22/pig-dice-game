@@ -136,7 +136,7 @@ const Main = ({ socket }) => {
             <Container className="mt-5">
                 <Row className="mt-5">
                     <Col xs="12" className="text-center mx-auto">
-                        <Dice side={latestRoll}/>
+                        <Dice side={latestRoll} isGameActive={isGameActive}/>
                     </Col>
                 </Row>
                 <Row>
