@@ -84,7 +84,7 @@ const Main = ({ socket }) => {
     }, [])
 
     const handleRoll = (activePlayer) => {
-        console.log(`calling handleRoll. latestRoll: ${latestRoll}`)
+        console.log(`calling handleRoll.`)
         if(!isGameActive) return;
         // Really dislike this solution of passing latestRoll to the server (since the server doesn't/shouldn't care),
         // but it works for now for the app to "remember" the previous roll.
