@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import GameStart from "./GameStart";
 import PlayerCard from "../features/players/PlayerCard";
 import { getAllPlayers, getActivePlayer, getClientPlayer, increaseScore, increaseTotalScore, resetScore, resetGame, setActivePlayer } from "../features/players/playersSlice";
-import { getIsGameActive, setIsGameActive } from "../features/game/gameSlice";
+import { getIsGameActive, getLatestRoll, setIsGameActive, setPrevRoll, setLatestRoll, getPrevRoll } from "../features/game/gameSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Container, Row } from "reactstrap";
 import { useCallback } from "react";
@@ -17,22 +17,22 @@ const Main = ({ socket }) => {
     const activePlayer = useSelector(getActivePlayer)
     const isGameActive = useSelector(getIsGameActive)
     const clientPlayer = useSelector(getClientPlayer)
+    const latestRoll = useSelector(getLatestRoll)
+    const prevRoll = useSelector(getPrevRoll)
     const dispatch = useDispatch()
-    const [latestRoll, setLatestRoll] = useState(null)
     const [rematchPlayer, setRematchPlayer] = useState("")
-    const [prevRoll, setPrevRoll] = useState(undefined)
 
     useEffect(() => {
         function onNewActivePlayer(newActivePlayer){
-            console.log('received new set-active-player msg from server')
+            console.log('Received new set-active-player msg from server')
             dispatch(setActivePlayer({newActivePlayer}))
-            setLatestRoll(null)
+            dispatch(setPrevRoll(null))
+            dispatch(setLatestRoll(null))
         }
-        function onUpdateScore({player, updateScore}) {
-            console.log('received new update-score msg from server')
-            // setPrevRoll(latestRoll) // TODO: investigate this and see why this doesn't allow us to do the bounce on both screens when latest and prev are the same
-            // It will probably need a force rerender situation
-            setLatestRoll(updateScore)
+        function onUpdateScore({player, updateScore, prevRoll}) {
+            console.log(`Received new update-score msg from server.`)
+            dispatch(setPrevRoll(prevRoll))
+            dispatch(setLatestRoll(updateScore))
             if(updateScore === 1){
                 dispatch(resetScore({activePlayer: player}))
             }
@@ -45,7 +45,8 @@ const Main = ({ socket }) => {
         }
         function onUpdateTotalScore({player, updateTotalScore}){
             dispatch(increaseTotalScore({activePlayer: player, points: updateTotalScore}))
-            setLatestRoll(null)
+            dispatch(setPrevRoll(null))
+            dispatch(setLatestRoll(null))
         }
 
         function onPlayerDisconnect(){
@@ -56,7 +57,8 @@ const Main = ({ socket }) => {
         function onBeginRematch(){
             dispatch(setIsGameActive({isGameActive: true}))
             dispatch(resetGame())
-            setLatestRoll(null)
+            dispatch(setPrevRoll(null))
+            dispatch(setLatestRoll(null))
             setRematchPlayer("")
         }
 
@@ -82,10 +84,11 @@ const Main = ({ socket }) => {
     }, [])
 
     const handleRoll = (activePlayer) => {
-        console.log('calling handleRoll')
+        console.log(`calling handleRoll. latestRoll: ${latestRoll}`)
         if(!isGameActive) return;
-        setPrevRoll(latestRoll)
-        socket.emit(E.DO_ROLL, activePlayer)
+        // Really dislike this solution of passing latestRoll to the server (since the server doesn't/shouldn't care),
+        // but it works for now for the app to "remember" the previous roll.
+        socket.emit(E.DO_ROLL, {activePlayer, latestRoll})
         // const randomNum = Math.ceil(Math.random() * 6)
         // setLatestRoll(randomNum)
         // if(randomNum === 1) {
@@ -113,26 +116,29 @@ const Main = ({ socket }) => {
     }
 
     // Hot key handling
-    const handleKeyPress = useCallback((e) => {
-        console.log(`${e.key}`)
-        console.log(isGameActive)
-        if(!isGameActive) return;
-        switch(e.key){
-            case " ": handleRoll(activePlayer); break;
-            case "Enter": handleHold(activePlayer); break;
-            default: break;
-        }
-    }, [isGameActive])
+    // TODO: Fix later, broken atm
+    // const handleKeyPress = useCallback((e) => {
+    //     console.log(`${e.key}`)
+    //     console.log(isGameActive)
+    //     console.log(`clientPlayer: ${clientPlayer}, activePlayer: ${activePlayer}`)
+    //     if(!isGameActive || clientPlayer !== activePlayer) return;
+    //     switch(e.key){
+    //         case " ": handleRoll(activePlayer); break;
+    //         case "Enter": handleHold(activePlayer); break;
+    //         default: break;
+    //     }
+    // }, [isGameActive])
 
-    useEffect(() => {
-        document.addEventListener('keyup', handleKeyPress)
-        return () => {
-            document.removeEventListener('keyup', handleKeyPress)
-        }
-    }, [handleKeyPress])
+    // useEffect(() => {
+    //     document.addEventListener('keyup', handleKeyPress)
+    //     return () => {
+    //         document.removeEventListener('keyup', handleKeyPress)
+    //     }
+    // }, [clientPlayer, activePlayer])
 
     // Not anything state related, just a shorthand for a comparison for down below
     const isClientPlayerActive = clientPlayer === activePlayer
+    const rollSameAsPrev = latestRoll && prevRoll && prevRoll === latestRoll
 
     return (
         <>
@@ -140,7 +146,7 @@ const Main = ({ socket }) => {
             <Container className="mt-5">
                 <Row className="mt-5">
                     <Col xs="12" className="text-center mx-auto">
-                        <Dice prevRoll={prevRoll} side={latestRoll} isGameActive={isGameActive} />
+                        <Dice rollSameAsPrev={rollSameAsPrev} isGameActive={isGameActive} />
                     </Col>
                 </Row>
                 <Row>

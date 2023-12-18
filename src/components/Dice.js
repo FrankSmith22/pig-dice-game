@@ -1,7 +1,12 @@
-const Dice = ({ prevRoll, side, isGameActive }) => {
+import { useSelector } from "react-redux";
+import { getLatestRoll } from "../features/game/gameSlice";
+
+const Dice = ({ rollSameAsPrev, isGameActive }) => {
+
+    const latestRoll = useSelector(getLatestRoll)
 
     let rotation = ""
-    switch(side){
+    switch(latestRoll){
         case 1: rotation = 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)'
                 break;
         case 2: rotation = 'rotateX(0deg) rotateY(90deg) rotateZ(0deg)'
@@ -17,19 +22,14 @@ const Dice = ({ prevRoll, side, isGameActive }) => {
         default: rotation = ''
                 break;
     }
-
-    console.log(`=================SIDE: ${side}`)
-    console.log(`=================PREV SIDE: ${prevRoll}`)
-    console.log(`new roll same as prev roll: ${prevRoll === side && prevRoll !== null}`)
-
-    const rollSameAsPrev = prevRoll === side && prevRoll !== null
+    
+    const diceStyle = !!rollSameAsPrev ? {transform: rotation, animation: "bounce 0.5s cubic-bezier(0, 0.6, 0.58, 1)"}
+        : !!rotation ? {transform: rotation}
+        : !isGameActive ? {animation: "rotate 5s linear infinite"}
+        : {animation: "settle 0.5s linear"}
 
     return(
-        <div className="dice mx-auto" style={
-                rollSameAsPrev ? {transform: rotation, animation: "bounce 0.5s cubic-bezier(0, 0.6, 0.58, 1)"} :
-                rotation ? {transform: rotation} : 
-                !isGameActive ? {animation: "rotate 5s linear infinite"} : {animation: "settle 0.5s linear"}
-        }>
+        <div className="dice mx-auto" style={{...diceStyle}}>
             <div className="side one"/>
             <div className="side two"/>
             <div className="side three"/>
