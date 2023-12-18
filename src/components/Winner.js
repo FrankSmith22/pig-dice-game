@@ -13,9 +13,11 @@ const Winner = ({ socket, clientPlayer, rematchPlayer }) => {
         socket.emit(E.ATTEMPT_REMATCH)
     }
 
-    if(winner){
-        dispatch(setIsGameActive({isGameActive: false}))
-    }
+    useEffect(() =>{
+        if(winner){
+            dispatch(setIsGameActive({isGameActive: false}))
+        }
+    }, [winner])
 
     return winner ? (
         <>
